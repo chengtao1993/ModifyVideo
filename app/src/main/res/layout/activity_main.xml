@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+    <FrameLayout
+        android:id="@+id/video_container"
+        android:background="#ffff"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:clickable="true"
+        android:gravity="center">
+
+        <VideoView android:id="@+id/videoView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+        <ImageView
+            android:layout_width="144dp"
+            android:layout_height="144dp"
+            android:layout_gravity="center"
+            android:background="@drawable/btn_play"
+            />
+    </FrameLayout>
+    <LinearLayout
+        android:background="#000fff"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center">
+        <TextView android:id="@+id/time_current"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30dp"
+            android:text="当前时间"
+            android:textColor="#00dfff"
+            android:layout_gravity="center_vertical|start"
+            android:layout_marginStart="28dp"/>
+        <SeekBar android:id="@+id/seek"
+            android:layout_width="700dp"
+            android:layout_height="90dp"
+            android:thumb="@drawable/thumb"
+            android:progressDrawable="@drawable/seekbar"/>
+        <TextView android:id="@+id/time_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30dp"
+            android:text="总时间"
+            android:textColor="#ffffff"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="28dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:background="#ff00"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center">
+        <ImageView android:id="@+id/videoplaystate"
+            android:layout_width="70dp"
+            android:layout_weight="13"
+            android:layout_height="wrap_content"
+            android:src="@drawable/videoplaystate"/>
+        <ImageView android:id="@+id/rewind"
+            android:layout_width="70dp"
+            android:layout_weight="8"
+            android:layout_height="wrap_content"
+            android:src="@drawable/rewind"/>
+        <ImageView android:id="@+id/last"
+            android:layout_width="70dp"
+            android:layout_weight="8"
+            android:layout_height="wrap_content"
+            android:src="@drawable/lastsong"/>
+        <ImageView android:id="@+id/next"
+            android:layout_width="70dp"
+            android:layout_weight="8"
+            android:layout_height="wrap_content"
+            android:src="@drawable/nextsong"/>
+        <ImageView android:id="@+id/fastforward"
+            android:layout_width="70dp"
+            android:layout_weight="8"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fastforward"/>
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.5"
+        android:background="#ffff00"
+        android:layout_marginTop="42dp"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/listview_topline"
+            android:visibility="gone"
+            android:layout_marginTop="110dp"/>
+
+        <ListView android:id="@+id/dataDisplay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="110dp"></ListView>
+        <TextView android:id="@+id/noFile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="110dp"
+            android:text="文件夹为空"
+            android:textColor="#ffffff"
+            android:textSize="30dp"
+            android:gravity="center"
+            android:visibility="gone"/>
+
+    </FrameLayout>
+
+
+
+
+</LinearLayout>

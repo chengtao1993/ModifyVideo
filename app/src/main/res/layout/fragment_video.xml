@@ -1,0 +1,38 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.archermind.video.VideoFragment">
+
+
+    <FrameLayout
+        android:layout_width="920dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_display_content"
+        android:layout_marginTop="142dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="80dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/listview_topline"
+            android:visibility="gone"
+            android:layout_marginTop="110dp"/>
+
+        <ListView android:id="@+id/dataDisplay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="110dp"></ListView>
+        <TextView android:id="@+id/noFile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="110dp"
+            android:text="文件夹为空"
+            android:textColor="#ffffff"
+            android:textSize="30dp"
+            android:gravity="center"
+            android:visibility="gone"/>
+
+    </FrameLayout>
+
+</FrameLayout>
