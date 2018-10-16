@@ -64,17 +64,22 @@
         android:background="#5500ff00"
         android:layout_marginTop="42dp"
         >
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/listview_topline"
-            android:visibility="gone"
-            android:layout_marginTop="110dp"/>
 
-        <ListView android:id="@+id/dataDisplay"
+
+        <GridView
+            android:id="@+id/videoList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="110dp"></ListView>
+            android:listSelector="@null"
+            android:horizontalSpacing="10dp"
+            android:verticalSpacing="10dp"
+            android:background="#c9c9c9"
+            android:numColumns="3"
+            android:scrollbars="none"
+            android:fadingEdge="none"
+            android:stretchMode="columnWidth"
+
+            />
 
         <TextView android:id="@+id/noFile"
             android:layout_width="match_parent"

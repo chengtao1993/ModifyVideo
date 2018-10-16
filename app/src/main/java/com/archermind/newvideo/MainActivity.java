@@ -24,8 +24,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,10 +45,8 @@ public class MainActivity extends Activity {
             Manifest.permission.MANAGE_DOCUMENTS,
     };
     private TextView noFile;
-    private ListView dataDisplay;
     private ArrayList<FileInfo> dataListView;
     private VideoAdapter mVideoAdapter;
-    private String videocontrol;
     private BroadcastReceiver usb_out;
     public  static int currentPosition =0;
     private Intent intent;
@@ -72,8 +70,7 @@ public class MainActivity extends Activity {
     private int seekBarRatio;
     private LayoutInflater mInflate;
     private ImageView playOrPause;
-
-
+    private GridView videoList;
 
 
     public VideoPlayController mVideoPlayController;
@@ -147,34 +144,30 @@ public class MainActivity extends Activity {
 
 
     private void initViews(){
+        videoList = findViewById(R.id.videoList);
         playOrPause = findViewById(R.id.playOrPause);
         dataListView = VideoUtils.getDataOrderByTime(this,current_source_path);
-        dataDisplay = findViewById(R.id.dataDisplay);
         mVideoAdapter = new VideoAdapter(this,dataListView);
-        dataDisplay.setAdapter(mVideoAdapter);
-        dataDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        videoList.setAdapter(mVideoAdapter);
+       videoList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("hct","item_click = "+i);
+
                 if (dataListView.get(i).isFile){
-                    Log.d("hct","1111");
                     currentPosition = i;
                     setData(dataList,currentPosition );
                     startPlaying();
                 }else {
-                    Log.d("hct","2222");
                     dataListView = VideoUtils.scanLocalFile(dataListView.get(i).path);
                     if (dataListView.size() == 0){
-                        Log.d("hct","2aaaaa");
-                        Toast.makeText(MainActivity.this,"aaaaa",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this,"Empty",Toast.LENGTH_SHORT).show();
                         noFile = findViewById(R.id.noFile);
                         noFile.setVisibility(View.VISIBLE);
                     }else {
-                        Log.d("hct","2bbb");
                         mVideoAdapter.setData(dataListView);
-                        mVideoAdapter.notifyDataSetChanged();
                     }
                 }
+                mVideoAdapter.notifyDataSetChanged();
             }
         });
 
@@ -307,7 +300,6 @@ public class MainActivity extends Activity {
         try {
             dataList = VideoUtils.getDataOrderByTime(this,current_source_path);
         }catch (Exception e){
-            Log.i("ccc","---MediaActivity---"+e);
         }
         IntentActionPlay();
         setData(dataList,currentPosition);
@@ -376,53 +368,6 @@ public class MainActivity extends Activity {
 
 
 
-    private void playlast(){
-        fastJump.removeMessages(2);
-        for (int i = localFileId - 1; i <= data.size();i--){
-            if (i == -1){
-                i = data.size();
-                continue;
-            }
-            if(data.get(i).isFile){
-                mFileInfo = data.get(i);
-                localFileId = i;
-               currentPosition=i;
-                mVideoPlayController.stop();
-                if (mFileInfo.uri == null){
-                    mVideoPlayController.setVideoPath(mFileInfo.path);
-                }else {
-                    mVideoPlayController.setVideoUri(mFileInfo.uri);
-                }
-                mVideoPlayController.start();
-                break;
-            }
-
-        }
-    }
-    private void playNext(){
-        fastJump.removeMessages(2);
-        for (int i = localFileId + 1; i <= data.size();i++){
-            if (i == data.size()){
-                i = -1;
-                continue;
-            }
-            if(data.get(i).isFile){
-                mFileInfo = data.get(i);
-                localFileId = i;
-                currentPosition=i;
-                mVideoPlayController.stop();
-                if (mFileInfo.uri == null){
-                    mVideoPlayController.setVideoPath(mFileInfo.path);
-                }else {
-                    mVideoPlayController.setVideoUri(mFileInfo.uri);
-                }
-                mVideoPlayController.start();
-                break;
-            }
-
-        }
-
-    }
 
 
     public void setData(ArrayList<FileInfo> arrayList,int localFileId){
