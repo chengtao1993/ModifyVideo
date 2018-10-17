@@ -17,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/NoActionBar">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -61,24 +62,6 @@
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name=".UsbListenerReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.UsbListenerReceiver" />
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </receiver>
-        <service
-            android:name=".UsbListenerService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.UsbListenerService" />
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </service>
     </application>
 
 </manifest>

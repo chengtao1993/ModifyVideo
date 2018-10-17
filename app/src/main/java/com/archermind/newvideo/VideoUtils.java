@@ -10,9 +10,7 @@ import android.provider.MediaStore;
 import java.io.File;
 import java.util.ArrayList;
 
-/**
- * Created by archermind on 1/15/18.
- */
+
 
 public class VideoUtils {
     public static final String localPath = Environment.getExternalStorageDirectory().getPath() + "/Movies";

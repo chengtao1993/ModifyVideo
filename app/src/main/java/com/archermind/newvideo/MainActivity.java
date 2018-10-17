@@ -2,11 +2,9 @@ package com.archermind.newvideo;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.media.MediaPlayer;
@@ -19,7 +17,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,11 +27,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 public class MainActivity extends Activity {
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -47,12 +42,9 @@ public class MainActivity extends Activity {
     private TextView noFile;
     private ArrayList<FileInfo> dataListView;
     private VideoAdapter mVideoAdapter;
-    private BroadcastReceiver usb_out;
     public  static int currentPosition =0;
     private Intent intent;
-    public static String current_source_name = "本地";
     public static String current_source_path = "external";
-    public static HashMap<String,String> name_path = new HashMap();
     private ArrayList<FileInfo> dataList;
     private ArrayList<FileInfo> data;
     private int localFileId;
@@ -68,9 +60,9 @@ public class MainActivity extends Activity {
     private final int orientation_rewind = 1;
     private final int orientation_fastforward = 2;
     private int seekBarRatio;
-    private LayoutInflater mInflate;
     private ImageView playOrPause;
     private GridView videoList;
+    private TextView videoName;
 
 
     public VideoPlayController mVideoPlayController;
@@ -119,31 +111,14 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         requestPermissions(PERMISSIONS_STORAGE,REQUEST_EXTERNAL_STORAGE);
         checkRequiredPermission(this);
-        mInflate = getLayoutInflater();
         initViews();
         intent = getIntent();
-        IntentFilter filter = new IntentFilter("com.archermind.media.USBOUT");
-        usb_out = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (name_path.containsKey(intent.getStringExtra("name"))){
-                    name_path.remove(intent.getStringExtra("name"));
-                    Map.Entry<String,String> entry = name_path.entrySet().iterator().next();
-                    current_source_name = entry.getKey();
-                    current_source_path = entry.getValue();
-                }
-
-            }
-        };
-        registerReceiver(usb_out,filter);
-        if (savedInstanceState != null) {
-
-        }
     }
 
 
 
     private void initViews(){
+        videoName = findViewById(R.id.video_name);
         videoList = findViewById(R.id.videoList);
         playOrPause = findViewById(R.id.playOrPause);
         dataListView = VideoUtils.getDataOrderByTime(this,current_source_path);
@@ -303,7 +278,6 @@ public class MainActivity extends Activity {
         }
         IntentActionPlay();
         setData(dataList,currentPosition);
-        startPlaying();
     }
 
 
@@ -341,6 +315,7 @@ public class MainActivity extends Activity {
     }
 
     public void startPlaying(){
+        videoName.setText(mFileInfo.name);
         mVideoPlayController.stop();
         mVideoPlayController.setVideoPath(mFileInfo.path);
         mVideoPlayController.start();

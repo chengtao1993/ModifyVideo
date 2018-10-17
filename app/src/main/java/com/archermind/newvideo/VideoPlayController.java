@@ -7,11 +7,7 @@ import android.widget.VideoView;
 import java.util.Formatter;
 import java.util.Locale;
 
-/*import android.os.SystemProperties;*/
 
-/**
- * Created by archermind on 1/16/18.
- */
 
 public class VideoPlayController {
     private VideoView mVideoView;
@@ -37,9 +33,6 @@ public class VideoPlayController {
         mVideoView.setVideoURI(uri);
     }
 
-    protected boolean isPlaying(){
-        return mVideoView.isPlaying();
-    }
 
     protected void start(){
         mVideoView.start();
@@ -58,17 +51,7 @@ public class VideoPlayController {
         mVideoView.stopPlayback();
     }
 
-    protected void seekto(int time){
-        mVideoView.seekTo(time);
-    }
 
-    protected int getCurrentPosition(){
-        return mVideoView.getCurrentPosition();
-    }
-
-    protected int getDuration(){
-        return mVideoView.getDuration();
-    }
 
     protected String getTotalTime(){
         mFormatBuilder = new StringBuilder();
