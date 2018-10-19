@@ -277,7 +277,9 @@ public class MainActivity extends Activity {
         }catch (Exception e){
         }
         IntentActionPlay();
-        setData(dataList,currentPosition);
+
+            setData(dataList, currentPosition);
+
     }
 
 
@@ -346,11 +348,10 @@ public class MainActivity extends Activity {
 
 
     public void setData(ArrayList<FileInfo> arrayList,int localFileId){
-        data = arrayList;
         this.localFileId = localFileId;
-        mFileInfo = arrayList.get(localFileId);
-        Log.i("ccc","......"+data+"----"+localFileId+"****"+mFileInfo);
-
+        if( null != arrayList && localFileId < arrayList.size()){
+            mFileInfo = arrayList.get(localFileId);
+        }
     }
     private void IntentActionPlay() {
         if(getIntent() != null && getIntent().getData() != null) {
