@@ -45,8 +45,6 @@ public class MainActivity extends Activity {
     public  static int currentPosition =0;
     private Intent intent;
     public static String current_source_path = "external";
-    private ArrayList<FileInfo> dataList;
-    private ArrayList<FileInfo> data;
     private int localFileId;
     private FileInfo mFileInfo;
     private VideoView mVideoView;
@@ -66,6 +64,14 @@ public class MainActivity extends Activity {
 
 
     public VideoPlayController mVideoPlayController;
+
+    private Handler loadVideoList = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+        }
+    };
 
     private Handler displayCurrentTime = new Handler(){
         @Override
@@ -109,7 +115,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        requestPermissions(PERMISSIONS_STORAGE,REQUEST_EXTERNAL_STORAGE);
+        //requestPermissions(PERMISSIONS_STORAGE,REQUEST_EXTERNAL_STORAGE);
         checkRequiredPermission(this);
         initViews();
         intent = getIntent();
@@ -130,7 +136,7 @@ public class MainActivity extends Activity {
 
                 if (dataListView.get(i).isFile){
                     currentPosition = i;
-                    setData(dataList,currentPosition );
+                    setData(dataListView,currentPosition );
                     startPlaying();
                 }else {
                     dataListView = VideoUtils.scanLocalFile(dataListView.get(i).path);
@@ -209,15 +215,15 @@ public class MainActivity extends Activity {
             }
             mVideoPlayController.start();
 
-            if(localFileId > 0 && localFileId < data.size()-1) {
+            if(localFileId > 0 && localFileId < dataListView.size()-1) {
 
             }else if(localFileId == 0){
 
-                if(data.size() > 1){
+                if(dataListView.size() > 1){
 
                 }
 
-            }else if(localFileId == data.size()-1){
+            }else if(localFileId == dataListView.size()-1){
 
             }
         }
@@ -272,14 +278,6 @@ public class MainActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-        try {
-            dataList = VideoUtils.getDataOrderByTime(this,current_source_path);
-        }catch (Exception e){
-        }
-        IntentActionPlay();
-
-            setData(dataList, currentPosition);
-
     }
 
 
@@ -353,47 +351,7 @@ public class MainActivity extends Activity {
             mFileInfo = arrayList.get(localFileId);
         }
     }
-    private void IntentActionPlay() {
-        if(getIntent() != null && getIntent().getData() != null) {
 
-            FileInfo info = new FileInfo();
-            info.isFile = true;
-            info.uri = intent.getData();
-            info.name = getFileName(this, info.uri);
-            ArrayList<FileInfo> arrayList = new ArrayList<FileInfo>();
-            arrayList.add(info);
 
-        }
-    }
-
-    private String getFileName(final Context context, final Uri uri) {
-        if (null == uri)
-            return null;
-        //
-        final String scheme = uri.getScheme();
-        String data = null;
-        if (scheme == null)
-            data = uri.getPath();
-        else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
-            data = uri.getPath();
-        } else if (ContentResolver.SCHEME_CONTENT.equals(scheme) ) {
-            Cursor cursor = context.getContentResolver().query(uri, new String[] {MediaStore.Images.ImageColumns.DATA }, null, null, null);
-            if (null != cursor) {
-                if (cursor.moveToFirst()) {
-                    int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-                    if (index > -1){
-                        data = cursor.getString(index);
-                    }
-                }
-                cursor.close();
-            }
-        }
-        //
-        if(data == null){
-            data = uri.toString();
-        }
-        String fileName = data.substring(data.lastIndexOf("/") + 1, data.length());
-        return fileName;
-    }
 
 }
