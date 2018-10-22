@@ -52,7 +52,6 @@ public class VideoAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        Log.d("hct","position = "+i+"||||currentPosition = "+MainActivity.currentPosition);
         if (view == null){
             mViewHolder = new ViewHolder();
             view = mLayoutInflater.inflate(R.layout.video_listview_content,null);

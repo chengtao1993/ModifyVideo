@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,10 +40,9 @@ public class MainActivity extends Activity {
             Manifest.permission.WRITE_SETTINGS,
             Manifest.permission.MANAGE_DOCUMENTS,
     };
-    private TextView noFile;
     private ArrayList<FileInfo> dataListView;
     private VideoAdapter mVideoAdapter;
-    public  static int currentPosition =0;
+    public  static int currentPosition = -1;
     private Intent intent;
     public static String current_source_path = "external";
     private int localFileId;
@@ -61,6 +61,9 @@ public class MainActivity extends Activity {
     private ImageView playOrPause;
     private GridView videoList;
     private TextView videoName;
+    private Context mContext;
+    private final static int LOAD_COMPLETE_MESSAGE = 1;
+    private ProgressBar mProgressbar;
 
 
     public VideoPlayController mVideoPlayController;
@@ -69,7 +72,16 @@ public class MainActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if(msg.what == LOAD_COMPLETE_MESSAGE) {
+                mVideoAdapter = new VideoAdapter(mContext,dataListView);
+                videoList.setAdapter(mVideoAdapter);
+                mProgressbar.setVisibility(View.GONE);
+                if(dataListView.size() == 0){
+                    Toast.makeText(mContext,"未找到视频",Toast.LENGTH_LONG).show();
+                }else
+                Toast.makeText(mContext,"加载完毕",Toast.LENGTH_LONG).show();
 
+            }
         }
     };
 
@@ -115,6 +127,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mContext = this;
         //requestPermissions(PERMISSIONS_STORAGE,REQUEST_EXTERNAL_STORAGE);
         checkRequiredPermission(this);
         initViews();
@@ -124,12 +137,17 @@ public class MainActivity extends Activity {
 
 
     private void initViews(){
+        mProgressbar = findViewById(R.id.progressbar);
         videoName = findViewById(R.id.video_name);
         videoList = findViewById(R.id.videoList);
         playOrPause = findViewById(R.id.playOrPause);
-        dataListView = VideoUtils.getDataOrderByTime(this,current_source_path);
-        mVideoAdapter = new VideoAdapter(this,dataListView);
-        videoList.setAdapter(mVideoAdapter);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                dataListView = VideoUtils.getDataOrderByTime(mContext,current_source_path);
+                loadVideoList.sendEmptyMessage(LOAD_COMPLETE_MESSAGE);
+            }
+        }).start();
        videoList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -141,9 +159,6 @@ public class MainActivity extends Activity {
                 }else {
                     dataListView = VideoUtils.scanLocalFile(dataListView.get(i).path);
                     if (dataListView.size() == 0){
-                        Toast.makeText(MainActivity.this,"Empty",Toast.LENGTH_SHORT).show();
-                        noFile = findViewById(R.id.noFile);
-                        noFile.setVisibility(View.VISIBLE);
                     }else {
                         mVideoAdapter.setData(dataListView);
                     }
